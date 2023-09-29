@@ -4,7 +4,11 @@ const Signup = ()=>{
 
 
     return(
-        <h1> Sign up form here </h1>
+        <div>
+            <h1> Sign up form here </h1>
+            
+        </div>
+        
     )
     
 }

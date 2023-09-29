@@ -48,9 +48,40 @@
   border-radius: 25px;
   border: 2px solid #73AD21;
   padding: 20px; 
-  width: 5 00px;
+  width: 50;
   height: 150px;
   margin: 0 auto; 
   font-size: 20px;
   font: green;
+}
+
+.login {
+  background: rgb(185, 221, 240);
+ height: 700px;
+ width: max;
+ padding-left: 300px;
+ border-radius: 5px;
+}
+
+.loginForm {
+  box-shadow: 4px 4px 8px 4px rgba(234, 35, 35, 0.452);
+  width: 250px;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 20px;
+  background: rgb(185, 240, 216);
+}
+.loginInput{
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+  border-color: blue;
+}
+#button {
+  color: whitesmoke;
+  background-color: blue;
+  font-weight: bold;
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
 }

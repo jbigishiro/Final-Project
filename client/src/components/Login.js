@@ -1,11 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
-const Login = ()=>{
-    return(
-        <h1> This is One of the Greatest Scientists </h1>
-    )
-    
+
+export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [username, password]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setUsername("");
+    setPassword("");
+  }
+  return (
+    <div className="login">
+      <h2 >Login</h2>
+
+      <div className="loginForm " >
+      <p style={{ color: "red" }}>{errorMessage}</p>
+      <form onSubmit={handleSubmit}>
+        <input className="loginInput"
+          type="text"
+          placeholder="Enter username"
+          value={username}
+          autoComplete="off"
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <br />  <br />
+
+        <input className="loginInput"
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <br />  <br />
+
+        <button id="button"  type="submit">Login</button>
+      </form>
+      </div>
+    </div>
+  );
 }
-
-export default Login;
