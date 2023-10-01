@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Game from "./Game";
 
 
 
@@ -43,8 +44,12 @@ export default function Login() {
         <br />  <br />
 
         <button id="button"  type="submit">Login</button>
+
       </form>
       </div>
+     
+      <Game />
+
     </div>
   );
 }
