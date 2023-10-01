@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Game from "./Game";
+import GamePage from "./GamePage";
 
 
 
@@ -48,7 +48,7 @@ export default function Login() {
       </form>
       </div>
      
-      <Game />
+      <GamePage />
 
     </div>
   );

@@ -56,10 +56,10 @@
 }
 
 .login {
-  background: rgb(185, 221, 240);
- height: 700px;
+background: rgb(185, 221, 240);
+ height: 100vh;;
  width: max;
- padding-left: 300px;
+ padding-left: 30px;
  border-radius: 5px;
 }
 
@@ -90,15 +90,15 @@
   background: #fff;
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
-  line-height: 34px;
-  height: 40px;
+  line-height: 70px;
+  height: 70px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 40px;
+  width: 70px;
 }
 
 .board-row:after {
@@ -106,3 +106,81 @@
   content: '';
   display: table;
 }
+
+.gamePage {
+  background: burlywood;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+}
+
+#instructionsSection {
+  width: 20%;
+  height: 100vh;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #fcf1f1;
+  border: 1px solid #ccc;
+  float: left;
+}
+
+#gameSection {
+  width: 50%;
+  height: 100vh;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #d0d0d0;
+  border: 1px solid #ccc;
+  float: left;
+}
+
+#reviewsSection {
+  width: 30%;
+  height: 100vh;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #fcf1f1;
+  border: 1px solid #ccc;
+  float: left;
+}
+
+/* Clearing floats to prevent layout issues */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+ 
+#table {
+  justify-content: center;
+  align-items: center;
+  padding-left: 200px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+#newGame {
+  background: rgb(104, 104, 249);
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 20px;
+}
+
+#timer {
+  font-size: 30px;
+  border: 2px solid #73AD21;
+  background: #d2fb98;
+  width: 100px;
+  height: 40px;
+  justify-content: right;  
+}
+
+ #pauseResume {
+  background: rgb(136, 136, 251);
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 20px;
+ }
+

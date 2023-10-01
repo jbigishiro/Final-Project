@@ -50,7 +50,7 @@ function Game() {
   const formatElapsedTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes} minutes ${remainingSeconds} seconds`;
+    return `${minutes}:${remainingSeconds}`;
   };
 
   const arrangeNumbersInTable = () => {
@@ -78,21 +78,28 @@ function Game() {
 
   return (
     <div className="App">
-      <h1>Random Number Generator</h1>
-      <button onClick={generateRandomNumbers}>New Game</button>
+      <h1>Number Search Game</h1>
+      
+      <button onClick={generateRandomNumbers} id= "newGame">New Game</button>
+      <div style={{paddingLeft:"40px"}}> {numbers.length > 0 &&<p id='timer'>{formatElapsedTime(time)}</p>} </div>
+      {time > 0 && selectedNumbers.length != 20 &&(
+       <button id='pauseResume' onClick={handlePauseResume}>{isRunning? "Pause" : "Resume"}</button> 
+      )}
+
+      {selectedNumbers.length == 20 && (
+        <h2 style={{color:"red"}}> Game Ended, your ranking is 20 in 100 players </h2>
+       ) }
+
       {numbers.length > 0 && (
-        <table>
+        <table id='table'>
           <tbody>{arrangeNumbersInTable()}</tbody>
         </table>
       )}
-      <p>Elapsed Time: {formatElapsedTime(time)}</p>
-      
-      {time > 0 && (
-       <button onClick={handlePauseResume}>{isRunning? "Pause" : "Resume"}</button> 
-      )}
-      <p>Selected Random Numbers: {selectedNumbers.join(', ')}</p>
+
+      { selectedNumbers.length > 0 && selectedNumbers.length < 20 && ( 
+      <p style={{fontWeight:'bold', fontSize:'20px', color:'blue'}}>Selected Numbers: {selectedNumbers.join(', ')}</p>)}
+    
     </div>
   );
 }
-
 export default Game;
