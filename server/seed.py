@@ -1,73 +1,60 @@
 #!/usr/bin/env python3
 
-from random import randint, choice as rc
-
+from random import randint
 from faker import Faker
-
-from app import app
-from models import db, User, Game, Review
+from app import app, db
+from models import User, Game, Review
 
 fake = Faker()
 
 with app.app_context():
-
     print("Deleting all records...")
-    User.query.delete()
-    Game.query.delete()
-    Review.query.delete()
-
-    fake = Faker()
+    db.session.query(User).delete()
+    db.session.query(Game).delete()
+    db.session.query(Review).delete()
 
     print("Creating users...")
-    # make sure users have unique usernames
     users = []
-    usernames = []
 
     for i in range(5):
-        
-        username = fake.first_name()
-        while username in usernames:
+        username = fake.user_name()
+        while User.query.filter_by(username=username).first():
             username = fake.first_name()
-        usernames.append(username)
 
         user = User(
             username=username
         )
-        user.password_hash = user.username + 'password'
+        user.password_hash = username + 'password'
 
         users.append(user)
 
     db.session.add_all(users)
+    db.session.commit()
 
     print("Creating games...")
     games = []
     for i in range(20):
-        
         game = Game(
-            minutes_to_complete=randint(40,100),
+            time_spent=randint(40, 100),
+            user_id=fake.random_element(elements=users).id
         )
-
-        game.user_id = rc(users)
-
         games.append(game)
 
     db.session.add_all(games)
+    db.session.commit()
 
-
-    print("Creating recipes...")
+    print("Creating reviews...")
     reviews = []
     for i in range(20):
         content = fake.paragraph(nb_sentences=6)
         
         review = Review(
-            content=content
+            content=content,
+            user_id=fake.random_element(elements=users).id
         )
-        review.user_id = rc(users)
-
         reviews.append(review)
 
     db.session.add_all(reviews)
-
     db.session.commit()
-    print("Complete.")
 
+    print("Complete.")

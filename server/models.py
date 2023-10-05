@@ -39,7 +39,7 @@ class Game(db.Model, SerializerMixin):
     
     
     def __repr__(self):
-        return f'User Id: {self.user_id}, Time spent: {self.time_spent}'
+        return f'Game ID: {self.id}, Time spent: {self.time_spent}'
     
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'

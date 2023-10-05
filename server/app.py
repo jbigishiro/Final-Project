@@ -5,8 +5,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from models import User, Game, Review
 
-from config import create_app
-app, db, migrate, bcrypt, api = create_app()
+from config import app, db, api
 
 
 class Signup(Resource):
