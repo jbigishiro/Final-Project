@@ -1,73 +1,88 @@
 #!/usr/bin/env python3
-
-from flask import request, session
+from flask import request, session, jsonify
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from models import User, Game, Review
+from random import sample
 
 from config import app, db, api
+from models import User, Game, Review
 
 
 class Signup(Resource):
-
     def post(self):
-         
-        json = request.get_json()
-        try:
-            json['username']
-        except KeyError:    
-            return {"Message":"Unprocessable Entity" }, 422
+        data = request.get_json()
+        username = data["username"]
+        password = data["password"]
+        password_confirmation = data["passwordConfirmation"]
+
+        errors = []
+        # Validate username and password
+        if not username or not password or not password_confirmation:
+            errors.append("All fields are required")
+
+        # Check if password and password_confirmation match
+        if password != password_confirmation:
+            errors.append("Password confirmation failed")
+
+        # Check if the username is already taken
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            errors.append("Username already taken. Please try again.")
+
+        if errors:
+            return {"errors": errors}, 422
+
         
-        try:
-            json['image_url']
-        except KeyError:    
-                user = User(
-                username=json['username'],
-            )
-        else:
-            user = User(
-            username=json['username'],
-            image_url=json['image_url'],
-            bio=json['bio']
-           )
-        
-        user.password_hash = json['password']
-        db.session.add(user)
+        # Hash the password and create a new user
+        new_user = User(username=username)
+        new_user.password_hash = password  # This will hash the password
+        db.session.add(new_user)
         db.session.commit()
 
-        session['user_id'] = user.id
-            
-        return (
-            {
-                "id" : user.id,
-                "username" : user.username,
-                "image_url" : user.image_url,
-                "bio" : user.bio
-            }
-        ), 201
+        session["user_id"] = new_user.id
 
+        return new_user.to_dict(), 201
+    
 class CheckSession(Resource):
     def get(self):
 
-        user=User.query.filter(User.id == session.get('user_id')).first()
-        
+        user=User.query.filter(User.id == session.get('user_id')).first()       
         if user:
             return (
             {
                 "id" : user.id,
                 "username" : user.username,
-                "image_url" : user.image_url,
-                "bio" : user.bio
             }, 200)
         return {"Message": "Unauthorized"}, 401
+    
+class Review(Resource):
+    def get(self):
+        user = User.query.filter(User.id==session.get('user_id')).first()
+        if user:
+            reviews = [review.to_dict() for review in Review.query.all()]
+            return (reviews),200
+        
+        return {'message': 'unauthorized'}, 401
 
+    def post(self):
+        user = User.query.filter(User.id==session.get('user_id')).first()
+        if user:
+            json = request.get_json()
+            review = Review(
+                    content = json['title'],
+                    user_id = session['user_id']
+                )
+            db.session.add(review)
+            db.session.commit()
+
+        return {"message": "unauthorized"}, 401
+    
 class Login(Resource):
     def post(self):
-        # Get the username from the JSON payload and fetch the user from the database
+
         username = request.get_json()['username']
         user = User.query.filter(User.username == username).first()
 
-        # If user is found and the password is correct, log the user in
         if user:
             password = request.get_json()['password']
             if user.authenticate(password):
@@ -75,75 +90,27 @@ class Login(Resource):
                 return {
                     "id" : user.id,
                     "username" : user.username,
-                    "image_url" : user.image_url,
-                    "bio" : user.bio
                 }, 201
 
-        # If authentication fails, return an error message with a 401 Unauthorized status
-        return {'error': 'Invalid username or password'}, 401
-
+        return {'error': 'Incorrect username or password, try again'}, 401
 
 class Logout(Resource):
     def delete(self):
-        # Check if a user is logged in and then log them out
+
         if session.get("user_id"):
             session['user_id'] = None
+
             return {}, 204
 
-        # If no user is logged in, return an unauthorized message with a 401 status
+
         return {"message": "unauthorized"}, 401
 
-class RecipeIndex(Resource):
-    def get(self):
-        # Fetch the logged-in user from the database
-        user = User.query.filter(User.id == session.get('user_id')).first()
-
-        # If user is found, return all recipes with a 200 OK status
-        if user:
-            recipes = [recipe.to_dict() for recipe in Recipe.query.all()]
-            return (recipes), 200
-        else:
-            # If no user is found, return an unauthorized message with a 401 status
-            return {"message": "unauthorized"}, 401
-
-    def post(self):
-        # Fetch the logged-in user from the database
-        user = User.query.filter(User.id == session.get('user_id')).first()
-        
-        # If user is found, try to create a new recipe
-        if user:
-            json = request.get_json()
-
-            try:
-                recipe = Recipe(
-                    title = json['title'],
-                    instructions = json['instructions'],
-                    minutes_to_complete = json['minutes_to_complete'],
-                    user_id = session['user_id']
-                )
-                db.session.add(recipe)
-                db.session.commit()
-            except IntegrityError:
-                # If there's a database error, return an error message with a 422 status
-                return {"message": "Unprocessable Entity"}, 422  
-
-            # Return the newly created recipe's details with a 201 Created status
-            return {
-                "title" : recipe.title,
-                "instructions" : recipe.instructions,
-                "minutes_to_complete" : recipe.minutes_to_complete,
-                "user_id" : recipe.user_id       
-            }, 201
-        else:
-            # If no user is found, return an unauthorized message with a 401 status
-            return {"message": "unauthorized"}, 401
-
-api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Signup, "/signup", endpoint="signup")
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
-api.add_resource(RecipeIndex, '/recipes', endpoint='recipes')
+api.add_resource(Review, '/reviews', endpoint='reviews')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(port=5555, debug=True)

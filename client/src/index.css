@@ -86,6 +86,30 @@ background: rgb(185, 221, 240);
   border-radius: 5px;
 }
 
+.signup {
+  background: rgba(138, 219, 241, 0.941);
+   height: 100vh;;
+   width: max;
+   padding-left: 30px;
+   border-radius: 5px;
+  }
+
+.signupForm {
+  box-shadow: 4px 4px 8px 4px rgba(165, 10, 10, 0.452);
+  width: 250px;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 20px;
+  background: rgb(80, 230, 165);
+}
+
+.signupInput{
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+  border-color: blue;
+}
+
 .square {
   background: #fff;
   border: 1px solid #999;
