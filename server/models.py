@@ -1,6 +1,8 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 from config import db, bcrypt
 

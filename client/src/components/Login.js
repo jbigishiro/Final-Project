@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({onLogin}) {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -20,12 +20,12 @@ export default function Login() {
     })
       .then((response) => {
         if (response.ok) {
-          return response.json().then((user) => {
-            console.log('Signin successful');
-            setPassword("");
-            setError(null)
-            navigate("/gamePage");
-          });
+          response.json().then((user) => onLogin(user))
+          console.log('Signin successful');
+          setPassword("");
+          setError(null)
+          navigate("/gamePage");
+          
         } else {
           return response.json().then((errorData) => {
             console.log('Signin failed');

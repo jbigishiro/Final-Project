@@ -6,69 +6,43 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 import GamePage from './components/GamePage';
 
-function App() {
-  const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [errors, setErrors] = useState([]);
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const fetchUser = () => {
-    fetch('/check_session')
-      .then((r) => {
-        if (r.ok) {
-          console.log('Fetch User', r);
-          r.json().then((userData) => {
-            setUserId(userData.id);
-            setUser(userData);
-            setIsLoggedIn(true);
-          });
-        } else {
-          r.json().then((errorData) => {
-            setErrors([errorData.errors]);
-            console.log(errors);
-          });
+  function App() {
+    const [user, setUser] = useState(null);
+  
+    useEffect(() => {
+      fetch("/check_session").then((response) => {
+        if (response.ok) {
+          response.json().then((user) => setUser(user));
         }
       });
-  };
-
-  const onLogin = (user) => setUser(user);
-
-  const handleLogout = () => {
-    fetch('/logout', {
-      method: 'DELETE',
-    }).then((r) => {
-      if (r.status === 204) {
-        setIsLoggedIn(false);
-        setUser(null);
-        setUserId(null);
-      } else {
-        console.error('Logout error:', r.statusText);
-      }
-    });
-  };
-
-  return (
-    <div className="app">
-      {!isLoggedIn ? (
-        <>
-          <NavBar />
+    }, []);
+  
+    function handleLogin(user) {
+      setUser(user);
+    }
+  
+    function handleLogout() {
+      setUser(null);
+    }
+    
+    return (
+      <div className="app">
+        {user ? (         
+            <Routes>
+              <Route path="/gamePage" element={<GamePage onLogout={handleLogout} />} />
+            </Routes>      
+        ) : (
+          <>
+           <NavBar />
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Home />} />
           </Routes>
-        </>
-      ) : (
-        <Routes>
-          <Route path="/gamePage" element={<GamePage />} />
-        </Routes>
-      )}
-    </div>
-  );
-}
+          </>
+        )}
+      </div>
+    );
+   }    
 
 export default App;
