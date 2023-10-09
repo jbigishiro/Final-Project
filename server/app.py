@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from flask import request, session, jsonify, make_response
 from flask_restful import Resource
 from sqlalchemy import func
@@ -14,15 +13,13 @@ class Signup(Resource):
         password_confirmation = data["passwordConfirmation"]
 
         errors = []
-        # Validate username and password
+
         if not username or not password or not password_confirmation:
             errors.append("All fields are required")
 
-        # Check if password and password_confirmation match
         if password != password_confirmation:
             errors.append("Password confirmation failed")
 
-        # Check if the username is already taken
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             errors.append("Username already taken. Please try again.")
@@ -30,7 +27,6 @@ class Signup(Resource):
         if errors:
             return {"errors": errors}, 422
 
-        # Hash the password and create a new user
         new_user = User(username=username)
         new_user.password_hash = password  
         db.session.add(new_user)
@@ -54,10 +50,17 @@ class ReviewResource(Resource):
     def get(self):
         user = User.query.filter_by(id=session.get('user_id')).first()
         if user:
-            reviews = [review.to_dict() for review in Review.query.all()]
-            return make_response(jsonify(reviews), 200)
+            reviews = []
+            for review in Review.query.all():
+                review_dict = {
+                "id": review.id,
+                "content": review.content,
+                }
+                reviews.append(review_dict)
+            response = make_response(reviews, 200)
+            return response
 
-        return {'message': 'Unauthorized'}, 401
+        return {'message': 'Unauthorized, please login'}, 401
 
     def post(self):
         user = User.query.filter_by(id=session.get('user_id')).first()

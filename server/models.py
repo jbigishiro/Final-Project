@@ -39,7 +39,6 @@ class Game(db.Model, SerializerMixin):
     played_at = db.Column(db.DateTime, server_default=db.func.now())
     time_spent = db.Column(db.Integer)
     
-    
     def __repr__(self):
         return f'Game ID: {self.id}, Time spent: {self.time_spent}'
     
