@@ -46,7 +46,7 @@ const AddReview = () => {
         <div>
           <textarea
             rows="6"
-            cols="40"
+            cols="60"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required

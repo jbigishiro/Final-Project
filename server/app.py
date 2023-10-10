@@ -53,8 +53,9 @@ class ReviewResource(Resource):
             reviews = []
             for review in Review.query.all():
                 review_dict = {
-                "id": review.id,
+
                 "content": review.content,
+                 "user_id": review.user_id,
                 }
                 reviews.append(review_dict)
             response = make_response(reviews, 200)

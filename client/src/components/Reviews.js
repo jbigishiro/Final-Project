@@ -28,13 +28,14 @@ function Reviews() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
+        <card>
           {reviews.map((review) => (
-            <li key={review.id}>
-              User ID: {review.user_id}, Content: {review.content}
-            </li>
+            <p key={review.id} style={{background:"white", padding:'10px', borderColor:"blue" }}>
+              {review.content}
+            </p>
+           
           ))}
-        </ul>
+         </card>
       )}
     </div>
   );

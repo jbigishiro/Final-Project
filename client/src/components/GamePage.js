@@ -22,7 +22,7 @@ function GamePage({onLogout }){
 
    return (
      <div className="gamePage">
-       <div id="instructionsSection"> Instructions to play</div>
+
       <div id="gameSection"> 
          <button style={{color:'red', fontSize:'20px', fontWeight:'bold'}} onClick={handleLogout}>Logout</button>
         <Game/> 

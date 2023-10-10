@@ -47,8 +47,9 @@
 .homeCard {
   border-radius: 25px;
   border: 2px solid #73AD21;
+  background: #b2adfc;
   padding: 20px; 
-  width: 50;
+  width: 500px;
   height: 150px;
   margin: 0 auto; 
   font-size: 20px;
@@ -137,21 +138,10 @@ background: rgb(185, 221, 240);
   justify-content: center;
   align-items: center;
   height: 100vh;
-
-}
-
-#instructionsSection {
-  width: 20%;
-  height: 100vh;
-  box-sizing: border-box;
-  text-align: center;
-  background-color: #fcf1f1;
-  border: 1px solid #ccc;
-  float: left;
 }
 
 #gameSection {
-  width: 50%;
+  width: 60%;
   height: 100vh;
   box-sizing: border-box;
   text-align: center;
@@ -161,7 +151,7 @@ background: rgb(185, 221, 240);
 }
 
 #reviewsSection {
-  width: 30%;
+  width: 40%;
   height: 100vh;
   box-sizing: border-box;
   text-align: center;

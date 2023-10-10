@@ -35,7 +35,7 @@ with app.app_context():
     games = []
     for i in range(20):
         game = Game(
-            time_spent=randint(40, 100),
+            time_spent=randint(30, 70),
             user_id=fake.random_element(elements=users).id
         )
         games.append(game)
@@ -45,8 +45,8 @@ with app.app_context():
 
     print("Creating reviews...")
     reviews = []
-    for i in range(20):
-        content = fake.paragraph(nb_sentences=6)
+    for i in range(5):
+        content = fake.paragraph(nb_sentences=4)
         
         review = Review(
             content=content,
